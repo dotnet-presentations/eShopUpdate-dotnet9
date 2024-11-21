@@ -1,0 +1,32 @@
+﻿@{
+    ViewBag.Title = "Product Page";
+}
+
+<main>
+    <h1>Product Details</h1>
+
+        <div>
+            <img height="200" width="200" src="https://raw.githubusercontent.com/MicrosoftDocs/mslearn-dotnet-cloudnative/main/dotnet-docker/Products/wwwroot/images/@ViewBag.Product.ImageUrl" />
+            <h2>@ViewBag.Product.Name</h2>
+            <p><strong>Description:</strong> @ViewBag.Product.Description</p>
+            <p><strong>Price:</strong> @ViewBag.Product.Price</p>
+
+            <h3>Review Summary</h3>
+            <p>@ViewBag.ReviewSummary</p>
+
+            <h3>Reviews</h3>
+            @foreach (var review in ViewBag.Product.Reviews)
+            {
+                // Display the sentiment for the review. Use thumbs up, down, and neutral emojis
+                var sentiment = review.Sentiment switch
+                {
+                    "positive" => "👍",
+                    "negative" => "👎",
+                    _ => "😐"
+                };
+
+                <p>@sentiment @review.Text</p>
+                <hr />
+            })
+        </div>
+ </main>
