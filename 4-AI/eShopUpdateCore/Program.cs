@@ -2,6 +2,7 @@ using Azure.AI.OpenAI;
 using Azure.Identity;
 using eShopUpdateCore.Services;
 using Microsoft.Extensions.AI;
+using OllamaSharp;
 using OpenAI;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -11,17 +12,28 @@ builder.AddRedisOutputCache("cache");
 
 builder.ConfigureApiService(builder.Configuration);
 
-builder.AddAzureOpenAIClient("chatcompletion");
 builder.Services.AddChatClient(clientBuilder =>
 {
-	var client = clientBuilder.Services.GetRequiredService<AzureOpenAIClient>();
-
     return
-		clientBuilder
-			.UseOpenTelemetry()
-			.UseDistributedCache()
-			.Use(client.AsChatClient("gpt-4o-mini"));
+        clientBuilder
+            .UseOpenTelemetry()
+            .UseDistributedCache()
+			.Use(new OllamaApiClient(builder.Configuration.GetConnectionString("chatcompletion"), "llama3.2"));
 });
+
+// Uncomment the following to use Azure OpenAI
+//builder.AddAzureOpenAIClient("chatcompletion");
+//builder.Services.AddChatClient(clientBuilder =>
+//{
+//    var client = clientBuilder.Services.GetRequiredService<AzureOpenAIClient>();
+
+//    return
+//        clientBuilder
+//            .UseOpenTelemetry()
+//            .UseDistributedCache()
+//            .Use(client.AsChatClient("gpt-4o-mini"));
+//			.Use(new OllamaApiClient(builder.Configuration.GetConnectionString("chatcompletion"), "llama3.2"));
+//});
 
 builder.Services.AddTransient<AISummaryService>();
 
