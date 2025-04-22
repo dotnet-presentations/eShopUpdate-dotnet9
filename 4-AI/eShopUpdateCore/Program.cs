@@ -12,14 +12,9 @@ builder.AddRedisOutputCache("cache");
 
 builder.ConfigureApiService(builder.Configuration);
 
-builder.Services.AddChatClient(clientBuilder =>
-{
-    return
-        clientBuilder
-            .UseOpenTelemetry()
-            .UseDistributedCache()
-			.Use(new OllamaApiClient(builder.Configuration.GetConnectionString("chatcompletion"), "llama3.2"));
-});
+builder.Services.AddChatClient(new OllamaApiClient(builder.Configuration.GetConnectionString("chatcompletion"), "llama3.2"))
+	.UseOpenTelemetry()
+	.UseDistributedCache();
 
 // Uncomment the following to use Azure OpenAI
 //builder.AddAzureOpenAIClient("chatcompletion");

@@ -47,7 +47,7 @@ namespace eShopUpdate.Controllers
                 var products = JsonConvert.DeserializeObject<Product>(productString);
 				var reviewSummary = await SummaryService.SummarizeReviews(products);
                 ViewBag.Product = products;
-                ViewBag.ReviewSummary = reviewSummary.Message;
+                ViewBag.ReviewSummary = reviewSummary.Text;
             }
 
 			return View();
