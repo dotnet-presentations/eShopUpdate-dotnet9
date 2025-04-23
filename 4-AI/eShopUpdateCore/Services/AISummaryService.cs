@@ -14,7 +14,7 @@ namespace eShopUpdateCore.Services
         }
 
 
-        public async Task<ChatCompletion> SummarizeReviews(Product product)
+        public async Task<ChatResponse> SummarizeReviews(Product product)
         {
             List<ChatMessage> messages = 
                 [ new ChatMessage(
@@ -28,7 +28,7 @@ namespace eShopUpdateCore.Services
 
             messages.Add(new ChatMessage(ChatRole.User, "Write a brief summary of the product reviews"));
 
-            var response = await _client.CompleteAsync(messages);
+            var response = await _client.GetResponseAsync(messages);
 
             return response;
         }
